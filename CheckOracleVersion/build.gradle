@@ -5,15 +5,14 @@ version = '1.0'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-task fatJar(type: Jar) {
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
-        attributes 'Implementation-Title': 'CheckOracleJar',
-                'Implementation-Version': version,
-                'Main-Class': 'com.forcam.DataSourceCheckDBVersion'
+        attributes('Main-Class': 'com.example.DataSourceCheckDBVersion')
     }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 //Get dependencies from Maven central repository
@@ -23,6 +22,5 @@ repositories {
 
 //Project dependencies
 dependencies {
-    //compile("com.oracle.database.jdbc:ojdbc8:12.2.0.1")
-    compile("com.oracle.database.jdbc:ojdbc8:19.12.0.0")
+    implementation("com.oracle.database.jdbc:ojdbc8:12.2.0.1")
 }
