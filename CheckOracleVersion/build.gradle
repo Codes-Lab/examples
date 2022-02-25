@@ -1,0 +1,28 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+version = '1.0'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'CheckOracleJar',
+                'Implementation-Version': version,
+                'Main-Class': 'com.forcam.DataSourceCheckDBVersion'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+//Get dependencies from Maven central repository
+repositories {
+    mavenCentral()
+}
+
+//Project dependencies
+dependencies {
+    //compile("com.oracle.database.jdbc:ojdbc8:12.2.0.1")
+    compile("com.oracle.database.jdbc:ojdbc8:19.12.0.0")
+}
